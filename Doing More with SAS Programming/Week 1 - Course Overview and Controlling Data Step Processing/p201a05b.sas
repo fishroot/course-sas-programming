@@ -1,0 +1,21 @@
+***********************************************************;
+*  Activity 1.05b (SAS Studio)                            *;
+*  1) Run the program. Observe the values of Year and     *;
+*     ProjectedSales written in the log.                  *;
+*  2) How many rows are in the input and output tables?   *;
+***********************************************************;
+
+data forecast;
+	set sashelp.shoes;
+	keep Region Product Subsidiary Year ProjectedSales;
+	format ProjectedSales dollar10.;
+	Year=1;
+	ProjectedSales=Sales*1.05;
+	putlog Year= ProjectedSales= _N_=;
+	Year=2;
+	ProjectedSales=ProjectedSales*1.05;
+	putlog Year= ProjectedSales= _N_=;
+	Year=3;
+	ProjectedSales=ProjectedSales*1.05;
+	putlog Year= ProjectedSales= _N_=;
+run;
