@@ -16,13 +16,20 @@
 *     step and run the selected code.                     *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 proc print data=pg2.np_lodging(obs=10);
 	where CL2010>0;
 run;
 
 data stays;
-	set pg2.np_lodging;
-	*Add assignment statements;
-	format Stay: comma11.;
-	keep Park Stay:;
+    set pg2.np_lodging;
+    Stay1=largest(1, of CL:);
+    Stay2=largest(2, of CL:);
+    Stay3=largest(3, of CL:);
+    StayAvg=round(mean(of CL:));
+    if StayAvg > 0;
+    format Stay: comma11.;
+    keep Park Stay:;
 run;
