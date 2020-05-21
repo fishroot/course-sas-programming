@@ -23,6 +23,6 @@ libname PG2 "&path";
 
 data weather_japan_clean;
     set pg2.weather_japan;
-    NewLocation= ;
-    NewStation= ;
+    NewLocation=COMPBL(Location);
+    NewStation=COMPRESS(Station, '-', ' ');
 run;
