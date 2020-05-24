@@ -20,8 +20,8 @@ data weather_japan_clean;
 	set pg2.weather_japan;
 	Location=compbl(Location);
 	City=propcase(scan(Location, 1, ','), ' ');
-	Prefecture=scan(Location, 2, ',');
-	*putlog Prefecture $quote20.;
+	Prefecture=strip(scan(Location, 2, ','));
+	putlog Prefecture $quote20.;
 	if Prefecture="Tokyo";
 run;
 
