@@ -24,11 +24,14 @@
 libname PG2 "&path";
 
 data storm_damage2;
-	set pg2.storm_damage;
-	CategoryLoc=find(Summary, 'category');
-	*if CategoryLoc > 0 then Category=substr(Summary,CategoryLoc, 10);
+    set pg2.storm_damage;
+    drop Date Cost Deaths;
+    CategoryLoc=find(Summary, 'Category', 'i');
+    if CategoryLoc > 0 then 
+       Category=substr(Summary, CategoryLoc, 10);
 run;
 
 proc print data=storm_damage2;
 	var Summary Cat:;
 run;
+
