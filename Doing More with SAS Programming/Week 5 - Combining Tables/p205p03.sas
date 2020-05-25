@@ -12,10 +12,21 @@
 *     the output table.                                   *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 proc sort data=pg2.np_codelookup out=work.codesort;
-	by ParkCode;
+    by ParkCode;
 run;
 
-proc sort data=pg2.np_2016traffic out=work.traf2016Sort;
-	by Code month;
+proc sort data=pg2.np_2016traffic(rename=(Code=ParkCode)) 
+          out=work.traf2016Sort;
+    by ParkCode month;
+run;
+
+data work.trafficstats;
+    merge work.traf2016Sort 
+          work.codesort;
+    by ParkCode;
+    drop Name_Code;
 run;
