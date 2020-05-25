@@ -8,6 +8,9 @@
 *  3) How many rows are in the STORM_OTHER table?         *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 proc sort data=pg2.storm_final out=storm_final_sort;
 	by Season Name;
 run;
@@ -24,10 +27,12 @@ proc sort data=storm_damage;
 	by Season Name;
 run;
 
-data damage_detail;
-	merge storm_final_sort(in=inFinal) storm_damage(in=inDamage);
-	keep Season Name BasinName MaxWindMPH MinPressure Cost Deaths;
-	by Season Name;
-	if inDamage=1 and inFinal=1 then output damage_detail;
-	*Add ELSE statement;
-run;
+data damage_detail  storm_other(drop=Cost Deaths);
+    merge storm_final_sort(in=inFinal) 
+          storm_damage(in=inDamage);
+    keep Season Name BasinName MaxWindMPH MinPressure 
+         Cost Deaths;
+    by Season Name;
+    if inDamage=1 and inFinal=1 then output damage_detail;
+    else output storm_other;
+run; 
