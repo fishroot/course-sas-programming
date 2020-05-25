@@ -16,11 +16,15 @@
 *     to the DATA step versus the PROC step?              *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 data work.stocks;
     set pg2.stocks;
     CloseOpenDiff=Close-Open;
     HighLowDiff=High-Low;
-    *add a FORMAT statement;
+    format Date monyy7. Volume comma12.
+       CloseOpenDiff HighLowDiff dollar8.2;
 run;
 
 proc print data=stocks (obs=5);
@@ -30,6 +34,6 @@ run;
 proc means data=stocks maxdec=0 nonobs mean min max;
     class Stock Date;
     var Open; 
-    *add a FORMAT statement; 
+    format Date year4.;
 run;
 
