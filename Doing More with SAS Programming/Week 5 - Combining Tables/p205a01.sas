@@ -14,8 +14,12 @@
 *     SASHELP.CLASS and Student in PG2.CLASS_NEW2?        *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 data class_current;
-    set sashelp.class pg2.class_new2;
+    set sashelp.class 
+        pg2.class_new2(rename=(Student=Name));
 run;
 
 proc contents data=sashelp.class;
