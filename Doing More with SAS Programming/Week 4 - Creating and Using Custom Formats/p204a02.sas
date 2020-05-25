@@ -17,18 +17,18 @@
 *     formatted?                                          *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 proc format;
     value $genfmt 'F'='Female'
                   'M'='Male';
-    *modify the following VALUE statement;
-    value format-name range1 = 'formatted-value'
-                      range2 = 'formatted-value'
-                      range3 = 'formatted-value' ;
-run;
+    value hrange 50-57='Below Average'
+                 58-60='Average'
+                 61-70='Above Average';
 
 proc print data=pg2.class_birthdate noobs;
     where Age=12;
     var Name Gender Height;
-    *add to the following FORMAT statement;
-    format Gender $genfmt.;
+    format Gender $genfmt. Height hrange.;
 run;
