@@ -14,7 +14,11 @@
 *     Are the Gender and Height values formatted?         *;
 ***********************************************************;
 
-proc format /*add a LIBRARY= option*/ ;
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
+proc format library=pg2;
+*/ OR proc format library=pg2.formats;  
     value $gender 'F'='Female'
                   'M'='Male'
                   other='Miscoded';
@@ -23,7 +27,8 @@ proc format /*add a LIBRARY= option*/ ;
                60<-high = 'Above Average';
 run;
 
-*add an OPTIONS statement;
+options fmtsearch=(pg2);
+*/ OR options fmtsearch=(pg2.formats); 
 
 proc print data=pg2.class_birthdate noobs;
     where Age=12;
