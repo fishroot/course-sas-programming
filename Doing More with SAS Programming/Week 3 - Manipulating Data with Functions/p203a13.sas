@@ -11,11 +11,14 @@
 *     numeric columns.                                    *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 data stocks2;
-   set pg2.stocks2(rename=(Volume=CharVolume));
+   set pg2.stocks2(rename=(Volume=CharVolume Date=CharDate));
    Volume=input(CharVolume,comma12.);
-   
-   drop CharVolume;
+   Date=input(CharDate,date9.);
+   drop Char: ;
 run;
 
 proc contents data=stocks2;
