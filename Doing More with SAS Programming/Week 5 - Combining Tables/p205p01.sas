@@ -11,7 +11,17 @@
 *     commas.                                             *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 data work.np_combine;
-    set ;
+    set pg2.np_2015 pg2.np_2016;
+    CampTotal=sum(of Camping:);
+    where Month in(6, 7, 8);
+    format CampTotal comma15.;
     drop Camping:;
+run;
+
+proc sort data=work.np_combine;
+	by ParkCode;
 run;
