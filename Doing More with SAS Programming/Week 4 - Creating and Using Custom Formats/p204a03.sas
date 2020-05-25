@@ -16,6 +16,9 @@
 *     the summary report?                                 *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 proc format;
     value $region 'NA'='Atlantic'
                   'WP','EP','SP'='Pacific'
@@ -27,13 +30,20 @@ run;
 data storm_summary;
     set pg2.storm_summary;
     Basin=upcase(Basin);
-    *Delete the IF-THEN/ELSE statements and replace them with an assignment statement;
+    BasinGroup=put(Basin, $region.);
+run;
+
+/*
+data storm_summary;
+    set pg2.storm_summary;
+    Basin=upcase(Basin);
     if Basin='NA' then BasinGroup='Atlantic';
     else if Basin in ('WP','EP','SP') then BasinGroup='Pacific';
     else if Basin in ('NI','SI') then BasinGroup='Indian';
     else if Basin=' ' then BasinGroup='Missing';
     else BasinGroup='Unknown';
 run;
+*/
 
 proc means data=storm_summary maxdec=1;
 	class BasinGroup;
