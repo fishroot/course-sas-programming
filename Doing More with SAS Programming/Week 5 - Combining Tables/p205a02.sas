@@ -8,6 +8,9 @@
 *     results. How many rows are in the output table?     *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 proc sort data=pg2.class_teachers out=teachers_sort;
 	by Name;
 run;
@@ -17,9 +20,8 @@ proc sort data=pg2.class_test2 out=test2_sort;
 run;
 
 data class2;
-	*Complete the MERGE and BY statements;
-	merge ;
-	by ;
+    merge teachers_sort test2_sort;
+    by Name;
 run;
 
 
