@@ -14,6 +14,9 @@
 *     CATFMT formats?                                     *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 /*Create the $SBFMT format for subbasin codes*/
 data sbdata;
     retain FmtName '$sbfmt';
@@ -37,5 +40,6 @@ run;
 proc format cntlin=catdata;
 run;
 
-*proc format fmtlib library=work;
-*run;
+proc format fmtlib library=work;
+	 select $sbfmt catfmt;
+run;
