@@ -18,14 +18,20 @@
 *     displayed.                                          *;
 ***********************************************************;
 
-proc format;
+%let path=~/EPG294/data;
+libname PG2 "&path";
 
+proc format;
+    value $highreg 'IM'='Intermountain'
+                   'PW'='Pacific West'
+                   'SE'='Southeast'
+                   other='All Other Regions';
 run;
 
 title 'High Frequency Regions';
 proc freq data=pg2.np_summary order=freq;
     tables Reg;
     label Reg='Region';
-
+    format Reg $highreg.;
 run;
 title;
