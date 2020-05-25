@@ -22,12 +22,16 @@
 *     the data is grouped by park types.                  *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 data type_lookup;
-    set pg2.np_codeLookup;
+    retain FmtName '$TypeFmt';
+    set pg2.np_codeLookup(rename=(ParkCode=Start Type=Label));
     keep Start Label FmtName;
 run;
 
-proc format;
+proc format cntlin=type_lookup;
 run;
 
 title 'Traffic Statistics';
@@ -35,5 +39,6 @@ proc means data=pg2.np_monthlyTraffic maxdec=0 mean sum nonobs;
     var Count;
     class ParkCode Month;
     label ParkCode='Name';
+    format ParkCode $TypeFmt.;
 run;
 title;
