@@ -22,3 +22,20 @@ title;
 
 /* Level 2 Practice: Restructuring a Table Using PROC TRANSPOSE: Narrow to Wide */
 
+/* 1 */
+
+proc transpose data=pg2.np_2016camping 
+               out=work.camping2016_transposed(drop=_name_);
+    by ParkName;
+    id CampType;
+    var CampCount;
+run;
+
+/* 2 */
+
+proc transpose data=pg2.np_2016camping 
+               out=work.camping2016_transposed(drop=_name_);
+    by ParkName;
+    id CampType;
+    var CampCount;
+run;
