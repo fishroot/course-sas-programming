@@ -12,11 +12,19 @@
 *     WHILE as compared to the DO UNTIL?                  *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 data Savings3K;
    set pg2.savings;
    Month=0;
    Savings=0;
-   do until (Savings>3000);
+   
+   Month+1;
+   Savings+Amount;
+   Savings+(Savings*0.02/12);
+   
+   do while (Savings>3000);
       Month+1;
       Savings+Amount;
       Savings+(Savings*0.02/12);
