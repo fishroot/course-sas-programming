@@ -17,14 +17,23 @@
 *     Backcountry visitor counts.                         *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 proc print data=pg2.np_2017camping(obs=10);
 run;
 
 data work.camping_narrow(drop=Tent RV Backcountry);
-	set pg2.np_2017Camping;
-	format CampCount comma12.;
-	CampType='Tent';
-	CampCount=Tent;
-	output;
-	*Add statements to output rows for RV and Backcountry;
+    length CampType $11;
+    set pg2.np_2017Camping;
+    format CampCount comma12.;
+    CampType='Tent';
+    CampCount=Tent;
+    output;
+    CampType='RV';
+    CampCount=RV;
+    output;
+    CampType='Backcountry';
+    CampCount=Backcountry;
+    output;
 run;
