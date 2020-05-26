@@ -10,10 +10,13 @@
 *     step to work?                                       *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 data class_wide;
 	set pg2.class_test_narrow;
 	by Name;
-	*retain Name Math Reading;
+	retain Name Math Reading;
 	keep Name Math Reading;
 	if TestSubject="Math" then Math=TestScore;
 	else if TestSubject="Reading" then Reading=TestScore;
