@@ -12,12 +12,15 @@
 *  6) What is the value of Savings?                       *;
 ***********************************************************;
 
+%let path=~/EPG294/data;
+libname PG2 "&path";
+
 data YearlySavings;
    Amount=200;
    do Month=1 to 12;
       Savings+Amount;
-	  *add a SUM Statement;
-	  output;
+	  Savings+(Savings*0.02/12);
+	  *output;
    end;
    format Savings 12.2;
 run;
