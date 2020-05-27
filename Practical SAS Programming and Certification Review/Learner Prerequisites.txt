@@ -1,0 +1,22 @@
+Learner Prerequisites
+
+Before taking this course, you should have completed Getting Started with SAS Programming and Doing More with SAS Programming or be able to do the following:
+
+    read SAS, Excel, and text files in a SAS program
+    write DATA step code to subset rows and columns, compute new columns, and process data conditionally
+    sort tables and remove duplicates using the SORT procedure
+    create and apply SAS formats
+    summarize data using the MEANS and FREQ procedures
+    create listing reports using the PRINT procedure
+    use SAS macro variables to dynamically replace text in a SAS program
+    export data and results
+    understand how SAS compiles and executes DATA step code, including how rows are processed in the Program Data Vector
+    Direct DATA step output with the OUTPUT statement
+    Summarize data and process data in groups in the DATA step
+    Use SAS functions to manipulate data values
+    Concatenate and merge tables using the DATA step
+    Process code iteratively in a DATA step using the DO loop.
+    Restructure SAS tables using the DATA step and TRANSPOSE procedure
+    Identify and resolve syntax and logic errors
+
+This course addresses Base SAS software.
