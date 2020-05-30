@@ -7,8 +7,8 @@ Read the payroll.csv text file in the data folder and create a temporary SAS tab
 Enable SAS to scan all the rows from the text file to determine column attributes in the payroll table.
 */
 
-
-proc import file="&path/payroll.csv" dbms=csv out=payroll replace;
+proc import datafile="&path/payroll.csv" out=payroll dbms=csv replace;
+    guessingrows=max;
 run;
 
 /*
