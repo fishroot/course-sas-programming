@@ -1,4 +1,5 @@
 /* Accessing Data */
+
 %let path=~/ECRB94/data;
 libname tsa "&path";
 
@@ -13,6 +14,7 @@ proc import
 run;
 
 /*Explore Data*/
+
 proc print data=tsa.ClaimsImport (obs=20);
 run;
 
@@ -32,6 +34,7 @@ proc print data=tsa.Claimsimport;
 run;
 
 /*Preparing Data*/
+
 proc sort
 		data=tsa.Claimsimport
 		out=tsa.Claims_NoDups noduprecs;
@@ -92,7 +95,8 @@ data tsa.claims_cleaned;
  	tables Claim_Site Disposition Claim_Type Date_Issues / nocum nopercent;
  run;
  
- /*Analyze Data*/
+/*Analyze Data*/
+
 title "Overall Date Issues in the data";
 proc freq data=tsa.claims_cleaned;
 	table date_issues /missing nocum nopercent;
@@ -105,5 +109,21 @@ proc freq data=tsa.claims_cleaned;
 	table Incident_Date /nocum nopercent plots=frqplot;
 	format Incident_Date YEAR4.;
 	where date_issues is null;
+run;
+title;
+
+%let statename=Hawaii;
+
+title "&statename Claim Types, Claim Sites and Disposition";
+proc freq data=tsa.claims_cleaned order=freq;
+	tables Claim_type Claim_site Disposition /nocum nopercent;
+	where StateName = "&statename" and Date_issues is null;
+run;
+title;
+
+title "Close_Amount Statistics for &statename";
+proc means data=tsa.claims_cleaned mean min max sum maxdec=0;
+	var Close_amount;
+	where StateName = "&statename" and Date_Issues is null;
 run;
 title;
