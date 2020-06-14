@@ -1,14 +1,13 @@
-/* Define Makrovariables */
-%let imppath = ~/ECRB94/data;
-%let outpath = ~/ECRB94/output;
+/* Accessing Data */
+%let path=~/ECRB94/data;
+libname tsa "&path";
 
-libname tsa "&imppath";
-
-/* Import Data */
 options validvarname=v7;
 
-proc import datafile="&imppath/TSAClaims2002_2017.csv" out=SAClaims dbms=csv 
+proc import
+		datafile="&path/TSAClaims2002_2017.csv"
+		dbms=csv
+		out=TSA.ClaimsImport
 		replace;
-	getnames=yes;
-	GUESSINGROWS=MAX;
+	guessingrows=max;
 run;
