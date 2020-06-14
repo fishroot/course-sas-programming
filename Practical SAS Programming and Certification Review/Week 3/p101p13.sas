@@ -91,3 +91,19 @@ data tsa.claims_cleaned;
  proc freq data=tsa.Claims_cleaned order=freq;
  	tables Claim_Site Disposition Claim_Type Date_Issues / nocum nopercent;
  run;
+ 
+ /*Analyze Data*/
+title "Overall Date Issues in the data";
+proc freq data=tsa.claims_cleaned;
+	table date_issues /missing nocum nopercent;
+run;
+title;
+
+ods graphics on;
+title "Overall Claims by Year";
+proc freq data=tsa.claims_cleaned;
+	table Incident_Date /nocum nopercent plots=frqplot;
+	format Incident_Date YEAR4.;
+	where date_issues is null;
+run;
+title;
