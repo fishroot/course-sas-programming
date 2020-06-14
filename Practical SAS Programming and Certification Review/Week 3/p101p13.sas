@@ -1,14 +1,14 @@
+%let path=~/ECRB94/data;
+%let outpath=~/ECRB94/output;
+
 /* Accessing Data */
 
-%let path=~/ECRB94/data;
 libname tsa "&path";
-
 options validvarname=v7;
-
 proc import
 		datafile="&path/TSAClaims2002_2017.csv"
 		dbms=csv
-		out=TSA.ClaimsImport
+		out=tsa.ClaimsImport
 		replace;
 	guessingrows=max;
 run;
@@ -97,6 +97,12 @@ data tsa.claims_cleaned;
  
 /*Analyze Data*/
 
+%let statename=Hawaii;
+
+ods pdf file="&outpath/ClaimsReport&statename.pdf" style=meadow pdftoc=1;
+ods noproctitle;
+
+ods proclabel "Overall Date Issues";
 title "Overall Date Issues in the data";
 proc freq data=tsa.claims_cleaned;
 	table date_issues /missing nocum nopercent;
@@ -104,16 +110,16 @@ run;
 title;
 
 ods graphics on;
+ods proclabel "Overall Claims by Year";
 title "Overall Claims by Year";
 proc freq data=tsa.claims_cleaned;
-	table Incident_Date /nocum nopercent plots=frqplot;
+	table Incident_Date /nocum nopercent plots=freqplot;
 	format Incident_Date YEAR4.;
 	where date_issues is null;
 run;
 title;
 
-%let statename=Hawaii;
-
+ods proclabel "&statename Claim Overview";
 title "&statename Claim Types, Claim Sites and Disposition";
 proc freq data=tsa.claims_cleaned order=freq;
 	tables Claim_type Claim_site Disposition /nocum nopercent;
@@ -121,9 +127,12 @@ proc freq data=tsa.claims_cleaned order=freq;
 run;
 title;
 
+ods proclabel "&statename Close Amount Statistics";
 title "Close_Amount Statistics for &statename";
 proc means data=tsa.claims_cleaned mean min max sum maxdec=0;
 	var Close_amount;
 	where StateName = "&statename" and Date_Issues is null;
 run;
 title;
+
+ods pdf close;
