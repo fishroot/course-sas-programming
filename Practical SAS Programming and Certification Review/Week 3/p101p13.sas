@@ -30,3 +30,64 @@ proc print data=tsa.Claimsimport;
 	where date_received < incident_date;
 	format date_received incident_date date9.;
 run;
+
+/*Preparing Data*/
+proc sort
+		data=tsa.Claimsimport
+		out=tsa.Claims_NoDups noduprecs;
+	by _all_;
+run;
+
+proc sort data=tsa.claims_nodups;
+	by Incident_date;
+run;
+
+data tsa.claims_cleaned;
+	set tsa.claims_nodups;
+	
+	/*Clean Claim_Sites*/
+	if Claim_Site in ('-', '') then Claim_Site="Unknown";
+	
+	/*Clean Disposition*/
+	if Disposition in ('-', '') then Disposition="Unknown";
+	else if Disposition='Closed: Contractor Claim' then Disposition='Closed:Contractor Claim';
+	else if Disposition='Closed: Canceled' then Disposition='Closed:Canceled';
+	
+	/*Clean Claim_Type*/
+	if Claim_Type in ('-', '') then Claim_Type="Unknown";
+	else if Claim_Type = 'Passanger Property Loss/Personal Injur' then Claim_Type='Passanger Property Loss';
+	else if Claim_Type = 'Passanger Property Loss/Personal Injury' then Claim_Type='Passanger Property Loss';
+	else if Claim_Type = 'Property Damags/Personal Injury' then Claim_Type='Property Damage';
+	
+	/*Clean State, StateName*/
+	State=upcase(State);
+	StateName=propcase(StateName);
+	
+	/*Date Issues*/
+	if Incident_date > Date_Received
+		or Incident_date = . or year(Incident_date) < 2002 or year(Incident_date) > 2017
+		or Date_Received = . or year(Date_Received) < 2002 or year(Date_Received) > 2017 then Date_Issues='Needs Review';
+ 	
+ 	/*Labels and formats*/
+ 	format
+ 		Incident_date Date_Received DATE9.
+ 		Close_amount DOLLAR20.2;
+ 	label
+ 		Airport_Code = "Airport Code"
+ 		Airport_Name = "Airport Name"
+ 		Claim_Number = "Claim Number"
+  		Claim_Site = "Claim Site"
+  		Claim_Type = "Claim Type"
+  		Close_Amount = "Close Amount"
+  		Date_Issues = "Date Issues"
+  		Date_Received = "Date Received"
+  		Incident_Date = "Incident Date"
+  		Item_Category = "Item Category";
+  	
+  	/*Drop*/
+  	drop county city;
+ run;
+ 
+ proc freq data=tsa.Claims_cleaned order=freq;
+ 	tables Claim_Site Disposition Claim_Type Date_Issues / nocum nopercent;
+ run;
